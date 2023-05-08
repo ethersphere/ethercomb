@@ -1,0 +1,28 @@
+{
+    "name": "ethercomb",
+    "version": "1.0.0",
+    "description": "",
+    "main": "dist/index.js",
+    "bin": {
+        "ethercomb": "./dist/index.js"
+    },
+    "scripts": {
+        "start": "ts-node src/index.ts",
+        "prepare": "npm run build",
+        "build": "rimraf dist && tsc"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "big.js": "^6.2.1",
+        "cafe-utility": "^9.0.1",
+        "ethers": "^6.3.0"
+    },
+    "devDependencies": {
+        "@types/big.js": "^6.1.6",
+        "@types/node": "^20.1.0",
+        "rimraf": "^5.0.0",
+        "typescript": "^5.0.4"
+    }
+}
