@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import Big from 'big.js'
 import { JsonRpcProvider, Signer, Wallet } from 'ethers'
 import { readFile, readdir } from 'fs/promises'

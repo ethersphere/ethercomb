@@ -18,7 +18,7 @@ export function runComposer() {
     gateway-proxy:
         image: cafe137/gateway-proxy
         ports:
-            - 4000:4000
+            - 3000:3000
         networks:
             - public
         volumes:
