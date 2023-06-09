@@ -15,11 +15,13 @@
     "license": "ISC",
     "dependencies": {
         "big.js": "^6.2.1",
-        "cafe-utility": "^9.0.1",
-        "ethers": "^6.3.0"
+        "cafe-utility": "^10.3.1",
+        "ethers": "^6.3.0",
+        "inquirer": "^8.2.5"
     },
     "devDependencies": {
         "@types/big.js": "^6.1.6",
+        "@types/inquirer": "^8.2.6",
         "@types/node": "^20.1.0",
         "rimraf": "^5.0.0",
         "typescript": "^5.0.4"

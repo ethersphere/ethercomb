@@ -1,11 +1,6 @@
-import { Numbers, Types } from 'cafe-utility'
+import { Numbers } from 'cafe-utility'
 
-export function runComposer() {
-    const numberOfBees = parseInt(process.argv[3], 10)
-    if (!Types.isNumber(numberOfBees)) {
-        console.error('Please provide a number of bees')
-        return
-    }
+export function runComposer(numberOfBees: number) {
     const preBee = `services:`
     const postBee = `
     bee-dashboard:
