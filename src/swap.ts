@@ -1,9 +1,9 @@
 import { Contract } from 'ethers'
 import { ABI } from './abi'
-import { getFaucetWallet, makeReadySigner } from './common'
+import { makeReadySigner, unlockV3 } from './common'
 
-export async function runSwap(value: string, minimumReturnValue: string, jsonRpcProvider: string) {
-    const wallet = getFaucetWallet()
+export async function runSwap(v3Path: string, value: string, minimumReturnValue: string, jsonRpcProvider: string) {
+    const wallet = await unlockV3(v3Path)
     const signer = await makeReadySigner(wallet.privateKey, jsonRpcProvider)
     const gasLimit = 29000000
     const contract = new Contract('0x1C232F01118CB8B424793ae03F870aa7D0ac7f77', ABI.uniswap, signer)

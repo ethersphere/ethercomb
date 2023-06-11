@@ -44,6 +44,11 @@ export async function makeReadyProvider(jsonRpcProvider: string): Promise<JsonRp
 
 export async function unlockV3(path: string): Promise<Wallet> {
     const json = await readFile(path, 'utf8')
+    try {
+        JSON.parse(json)
+    } catch {
+        return new Wallet(json)
+    }
     const password = await promptForPassword()
     const wallet = (await Wallet.fromEncryptedJson(json, password)) as Wallet
     return wallet

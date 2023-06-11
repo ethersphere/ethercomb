@@ -8,6 +8,7 @@ export async function printBalance(wallet: Wallet | string, jsonRpc: string): Pr
     const provider = await makeReadyProvider(jsonRpc)
     const balance = await provider.getBalance(wallet.address)
     const bzzBalance = await getBzzBalance(wallet.address, jsonRpc)
-    console.log(`Faucet: ${daiToString(balance.toString()).slice(0, 8)} DAI`)
-    console.log(`Faucet: ${bzzToString(bzzBalance.toString()).slice(0, 8)} BZZ`)
+    console.log(wallet.address)
+    console.log(`${daiToString(balance.toString()).slice(0, 8)} DAI`)
+    console.log(`${bzzToString(bzzBalance.toString()).slice(0, 8)} BZZ`)
 }
