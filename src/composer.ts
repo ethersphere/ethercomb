@@ -1,48 +1,39 @@
 import { Numbers } from 'cafe-utility'
 
-export function runComposer(numberOfBees: number) {
+export function runComposer(swapEndpoint: string, numberOfBees: number): string {
     const preBee = `services:`
     const postBee = `
-    bee-dashboard:
-        image: cafe137/bee-dashboard
-        ports:
-            - 8080:8080
+    etherproxy:
+        image: cafe137/etherproxy:1.0.3
         networks:
             - public
-
-    gateway-proxy:
-        image: cafe137/gateway-proxy
-        ports:
-            - 3000:3000
-        networks:
-            - public
-        volumes:
-            - ./proxy:/usr/src/config
-
+        environment:
+            PORT: 4000
+            TARGET: ${swapEndpoint}
 
 networks:
     public:
 `
-    console.log(
+    const string =
         preBee +
-            Numbers.range(0, numberOfBees - 1)
-                .map(createBeeSnippet)
-                .join('') +
-            postBee +
-            createVolumeSnippet(numberOfBees)
-    )
+        Numbers.range(0, numberOfBees - 1)
+            .map(createBeeSnippet)
+            .join('') +
+        postBee +
+        createVolumeSnippet(numberOfBees)
+    return string
 }
 
 function createBeeSnippet(zeroBasedIndex: number): string {
-    const portIndex = 163 + zeroBasedIndex
+    const portIndex = zeroBasedIndex + 1
     return `
     bee-${zeroBasedIndex + 1}:
         image: ethersphere/bee
-        command: start --password=Swarm --blockchain-rpc-endpoint=https://xdai.fairdatasociety.org --debug-api-enable=true --cors-allowed-origins="*" --api-addr=:${portIndex}3 --p2p-addr=:${portIndex}4 --debug-api-addr=:${portIndex}5
+        command: start --config=/home/bee/.bee/config.yaml
         ports:
-            - ${portIndex}3:${portIndex}3
-            - ${portIndex}4:${portIndex}4
-            - ${portIndex}5:${portIndex}5
+            - ${1700 + portIndex}:${1700 + portIndex}
+            - ${1800 + portIndex}:${1800 + portIndex}
+            - ${1900 + portIndex}:${1900 + portIndex}
         networks:
             - public
         volumes:

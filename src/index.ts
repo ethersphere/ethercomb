@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
-import { Numbers, Types } from 'cafe-utility'
+import { Arrays, Numbers } from 'cafe-utility'
 import { printBalance } from './balance'
+import { cancelTransaction } from './cancel'
 import { runComposer } from './composer'
+import { runCreateCommand } from './create'
 import { runDeployer } from './deployer'
+import { depositStake } from './deposit-stake'
 import { runFunder } from './funder'
+import { runRedeem } from './redeem'
 import { sendBzz } from './send-bzz'
 import { runStatus } from './status'
 import { runSwap } from './swap'
@@ -30,17 +34,43 @@ async function main() {
         case 'swap':
             return runSwap(
                 process.argv[3],
-                Numbers.make(process.argv[4].split('dai=')[1]).toString(),
-                Numbers.make(process.argv[5].split('bzz=')[1]).toString(),
+                Arrays.requireNumberArgument(process.argv, 'bzz').toFixed(0),
                 JSON_RPC
             ).catch(console.error)
+        case 'redeem':
+            const amountIn = Arrays.requireNumberArgument(process.argv, 'amountIn').toFixed(0)
+            return runRedeem(
+                process.argv[3],
+                amountIn,
+                Arrays.requireNumberArgument(process.argv, 'amountOutMin').toFixed(0),
+                JSON_RPC
+            )
         case 'deploy':
-            return runDeployer(Types.asNumber(parseInt(process.argv[3], 10))).catch(console.error)
+            return runDeployer(Arrays.requireNumberArgument(process.argv, 'count')).catch(console.error)
+
         case 'compose':
-            return runComposer(Types.asNumber(parseInt(process.argv[3], 10)))
+            return runComposer(
+                Arrays.requireStringArgument(process.argv, 'rpc'),
+                Arrays.requireNumberArgument(process.argv, 'count')
+            )
         case 'fund':
-            return runFunder(JSON_RPC).catch(console.error)
+            return runFunder(process.argv[3], JSON_RPC).catch(console.error)
         case 'unlock':
             return unlock(process.argv[3]).catch(console.error)
+        case 'stake':
+            const amount = Arrays.requireNumberArgument(process.argv, 'amount').toFixed(0)
+            return depositStake(
+                process.argv[3],
+                Arrays.requireNumberArgument(process.argv, 'amount').toFixed(0),
+                JSON_RPC
+            )
+        case 'cancel':
+            return cancelTransaction(process.argv[3], Arrays.requireNumberArgument(process.argv, 'nonce'), JSON_RPC)
+        case 'create':
+            return runCreateCommand(
+                process.argv[3],
+                Arrays.requireNumberArgument(process.argv, 'count'),
+                Arrays.requireStringArgument(process.argv, 'rpc')
+            )
     }
 }

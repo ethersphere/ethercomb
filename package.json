@@ -1,6 +1,6 @@
 {
     "name": "ethercomb",
-    "version": "2.0.0",
+    "version": "4.0.0",
     "description": "",
     "main": "dist/index.js",
     "bin": {
@@ -15,7 +15,8 @@
     "license": "ISC",
     "dependencies": {
         "big.js": "^6.2.1",
-        "cafe-utility": "^10.3.2",
+        "cafe-node-utility": "^1.1.0",
+        "cafe-utility": "^10.6.0",
         "chalk": "4",
         "ethers": "^6.3.0",
         "inquirer": "^8.2.5",
