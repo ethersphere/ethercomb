@@ -1,7 +1,7 @@
-import { makeReadySigner, unlockV3 } from './common'
+import { createWallet, makeReadySigner } from './common'
 
-export async function cancelTransaction(v3Path: string, nonce: number, jsonRpcProvider: string): Promise<void> {
-    const wallet = await unlockV3(v3Path)
+export async function cancelTransaction(walletSource: string, nonce: number, jsonRpcProvider: string): Promise<void> {
+    const wallet = await createWallet(walletSource)
     const signer = await makeReadySigner(wallet.privateKey, jsonRpcProvider)
     const gasLimit = 21_000
     await signer.sendTransaction({

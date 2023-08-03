@@ -1,4 +1,5 @@
 import Big from 'big.js'
+import { Files } from 'cafe-node-utility'
 import { Numbers, System } from 'cafe-utility'
 import { Contract, JsonRpcProvider, Signer, Wallet } from 'ethers'
 import { readFile, readdir } from 'fs/promises'
@@ -39,21 +40,24 @@ export async function makeReadyProvider(jsonRpcProvider: string): Promise<JsonRp
     return provider
 }
 
-export async function unlockV3(path: string, password?: string): Promise<Wallet> {
-    if (!isNaN(Number(path))) {
-        return new Wallet(path)
+export async function createWallet(path: string, password?: string): Promise<Wallet> {
+    if (await Files.existsAsync(path)) {
+        const json = await readFile(path, 'utf8')
+        try {
+            JSON.parse(json)
+        } catch {
+            return new Wallet(json)
+        }
+        if (!password) {
+            password = await promptForPassword()
+        }
+        const wallet = (await Wallet.fromEncryptedJson(json, password)) as Wallet
+        return wallet
     }
-    const json = await readFile(path, 'utf8')
-    try {
-        JSON.parse(json)
-    } catch {
-        return new Wallet(json)
+    if (path.startsWith('0x')) {
+        path = path.slice(2)
     }
-    if (!password) {
-        password = await promptForPassword()
-    }
-    const wallet = (await Wallet.fromEncryptedJson(json, password)) as Wallet
-    return wallet
+    return new Wallet(path)
 }
 
 export async function sendNativeTransaction(privateKey: string, to: string, value: string, jsonRpcProvider: string) {

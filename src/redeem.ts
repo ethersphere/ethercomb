@@ -1,10 +1,10 @@
 import { Contract } from 'ethers'
 import { ABI } from './abi'
-import { approveSpending, makeReadySigner, unlockV3 } from './common'
+import { approveSpending, createWallet, makeReadySigner } from './common'
 import { Contracts } from './contracts'
 
-export async function runRedeem(v3Path: string, amountIn: string, amountOutMin: string, jsonRpcProvider: string) {
-    const wallet = await unlockV3(v3Path)
+export async function runRedeem(walletSource: string, amountIn: string, amountOutMin: string, jsonRpcProvider: string) {
+    const wallet = await createWallet(walletSource)
     const signer = await makeReadySigner(wallet.privateKey, jsonRpcProvider)
     const gasLimit = 29000000
     await approveSpending(wallet, Contracts.uniswap, amountIn, jsonRpcProvider)

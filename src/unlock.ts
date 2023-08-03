@@ -1,6 +1,6 @@
-import { unlockV3 } from './common'
+import { createWallet } from './common'
 
-export async function unlock(path: string): Promise<void> {
-    const wallet = await unlockV3(path)
+export async function unlock(walletSource: string): Promise<void> {
+    const wallet = await createWallet(walletSource)
     console.log(wallet.privateKey)
 }
