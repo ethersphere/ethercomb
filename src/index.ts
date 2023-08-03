@@ -20,7 +20,7 @@ async function main() {
     const command = process.argv[2]
     switch (command) {
         case 'status':
-            return runStatus(Arrays.requireStringArgument(process.argv, 'wallet'))
+            return runStatus(Arrays.requireStringArgument(process.argv, 'yaml'))
         case 'balance':
             return printBalance(
                 Arrays.requireStringArgument(process.argv, 'wallet'),
@@ -49,9 +49,11 @@ async function main() {
         case 'deploy':
             return runDeployer(Arrays.requireNumberArgument(process.argv, 'count')).catch(console.error)
         case 'compose':
-            return runComposer(
-                Arrays.requireStringArgument(process.argv, 'rpc'),
-                Arrays.requireNumberArgument(process.argv, 'count')
+            return console.log(
+                runComposer(
+                    Arrays.requireStringArgument(process.argv, 'rpc'),
+                    Arrays.requireNumberArgument(process.argv, 'count')
+                )
             )
         case 'fund':
             return runFunder(
