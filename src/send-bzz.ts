@@ -1,6 +1,6 @@
-import { sendBzzTransaction, unlockV3 } from './common'
+import { createWallet, sendBzzTransaction } from './common'
 
-export async function sendBzz(v3Path: string, toAddress: string, amount: string, jsonRpc: string): Promise<void> {
-    const wallet = await unlockV3(v3Path)
+export async function sendBzz(walletSource: string, toAddress: string, amount: string, jsonRpc: string): Promise<void> {
+    const wallet = await createWallet(walletSource)
     await sendBzzTransaction(wallet.privateKey, toAddress, amount, jsonRpc)
 }

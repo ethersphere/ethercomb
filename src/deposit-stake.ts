@@ -1,13 +1,13 @@
 import { Numbers } from 'cafe-utility'
 import { Contract } from 'ethers'
 import { ABI } from './abi'
-import { approveSpending, makeReadySigner, unlockV3 } from './common'
+import { approveSpending, createWallet, makeReadySigner } from './common'
 import { Contracts } from './contracts'
 
 const NONCE = '0x0000000000000000000000000000000000000000000000000000000000000000'
 
-export async function depositStake(v3Path: string, amount: string, jsonRpcProvider: string) {
-    const wallet = await unlockV3(v3Path)
+export async function depositStake(walletSource: string, amount: string, jsonRpcProvider: string) {
+    const wallet = await createWallet(walletSource)
     const signer = await makeReadySigner(wallet.privateKey, jsonRpcProvider)
     await approveSpending(wallet, Contracts.staking, amount, jsonRpcProvider)
     const staking = new Contract(Contracts.staking, ABI.staking, signer)

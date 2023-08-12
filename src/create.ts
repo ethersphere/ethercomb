@@ -1,13 +1,13 @@
 import { Numbers, System } from 'cafe-utility'
 import { writeFile } from 'fs/promises'
-import { getBzzBalance, sendBzzTransaction, swap, unlockV3 } from './common'
+import { createWallet, getBzzBalance, sendBzzTransaction, swap } from './common'
 import { runComposer } from './composer'
 import { XDAI_TO_SEND } from './constants'
 import { runDeployer } from './deployer'
 import { depositStake } from './deposit-stake'
 import { runFunder } from './funder'
 
-export async function runCreateCommand(v3Path: string, amountOfBees: number, swapEndpoint: string) {
+export async function runCreateCommand(walletSource: string, amountOfBees: number, swapEndpoint: string) {
     console.log(`Creating stack of ${amountOfBees} staking Bee nodes.`)
     console.log('Here is a rundown of the steps that will be performed:')
     console.log('')
@@ -19,7 +19,7 @@ export async function runCreateCommand(v3Path: string, amountOfBees: number, swa
     console.log('  6. Generating docker-compose.yaml.')
     console.log('')
     console.log('Please unlock your V3 wallet so these can be done for you automatically.')
-    const wallet = await unlockV3(v3Path)
+    const wallet = await createWallet(walletSource)
     printSeparator()
     console.log('Step 1.) Creating a new wallet for each node.')
     await runDeployer(amountOfBees)
@@ -50,7 +50,7 @@ export async function runCreateCommand(v3Path: string, amountOfBees: number, swa
     printSeparator()
     console.log('Step 4.) Sending xBZZ to the Bee wallets.')
     for (let i = 1; i <= amountOfBees; i++) {
-        const beeWallet = await unlockV3(`./bee-${i}/keys/swarm.key`, 'password')
+        const beeWallet = await createWallet(`./bee-${i}/keys/swarm.key`, 'password')
         const address = beeWallet.address
         const balance = await getBzzBalance(address, swapEndpoint)
         if (balance >= Numbers.make('10.025bzz')) {
@@ -62,7 +62,7 @@ export async function runCreateCommand(v3Path: string, amountOfBees: number, swa
     printSeparator()
     console.log('Step 5.) Permitting xBZZ spend and depositing initial stake of 10 xBZZ.')
     for (let i = 1; i <= amountOfBees; i++) {
-        const beeWallet = await unlockV3(`./bee-${i}/keys/swarm.key`, 'password')
+        const beeWallet = await createWallet(`./bee-${i}/keys/swarm.key`, 'password')
         await depositStake(beeWallet.privateKey, Numbers.make('10.025bzz').toFixed(0), swapEndpoint)
     }
     printSeparator()

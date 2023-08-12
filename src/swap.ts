@@ -1,10 +1,10 @@
 import { Numbers } from 'cafe-utility'
 import { Contract } from 'ethers'
 import { ABI } from './abi'
-import { makeReadySigner, unlockV3 } from './common'
+import { createWallet, makeReadySigner } from './common'
 
-export async function runSwap(v3Path: string, amountOut: string, jsonRpcProvider: string) {
-    const wallet = await unlockV3(v3Path)
+export async function runSwap(walletSource: string, amountOut: string, jsonRpcProvider: string) {
+    const wallet = await createWallet(walletSource)
     const signer = await makeReadySigner(wallet.privateKey, jsonRpcProvider)
     const gasLimit = 29000000
     const contract = new Contract('0x1C232F01118CB8B424793ae03F870aa7D0ac7f77', ABI.uniswap, signer)

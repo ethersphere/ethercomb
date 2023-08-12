@@ -1,4 +1,4 @@
-import { getBeeDirectories, makeReadyProvider, sendNativeTransaction, unlockV3 } from './common'
+import { createWallet, getBeeDirectories, makeReadyProvider, sendNativeTransaction } from './common'
 import { MINIMUM_XDAI_ON_ADDRESS, XDAI_TO_SEND } from './constants'
 
 export async function runFunder(privateKey: string, jsonRpc: string) {
@@ -18,7 +18,7 @@ export async function runFunder(privateKey: string, jsonRpc: string) {
 
 async function getAddressIfRequiresFunding(password: string, dir: string, jsonRpc: string): Promise<string | null> {
     const path = `${dir}/keys/swarm.key`
-    const { address } = await unlockV3(path, password)
+    const { address } = await createWallet(path, password)
     const provider = await makeReadyProvider(jsonRpc)
     const balance = await provider.getBalance(address)
     if (balance < MINIMUM_XDAI_ON_ADDRESS) {

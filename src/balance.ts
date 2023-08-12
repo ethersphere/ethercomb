@@ -1,10 +1,7 @@
-import { Wallet } from 'ethers'
-import { bzzToString, daiToString, getBzzBalance, makeReadyProvider, unlockV3 } from './common'
+import { bzzToString, createWallet, daiToString, getBzzBalance, makeReadyProvider } from './common'
 
-export async function printBalance(wallet: Wallet | string, jsonRpc: string): Promise<void> {
-    if (typeof wallet === 'string') {
-        wallet = await unlockV3(wallet)
-    }
+export async function printBalance(walletSource: string, jsonRpc: string): Promise<void> {
+    const wallet = await createWallet(walletSource)
     const provider = await makeReadyProvider(jsonRpc)
     const balance = await provider.getBalance(wallet.address)
     const bzzBalance = await getBzzBalance(wallet.address, jsonRpc)
