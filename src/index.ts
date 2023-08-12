@@ -10,6 +10,7 @@ import { depositStake } from './deposit-stake'
 import { runFunder } from './funder'
 import { runRedeem } from './redeem'
 import { sendBzz } from './send-bzz'
+import { sendDai } from './send-dai'
 import { runStatus } from './status'
 import { runSwap } from './swap'
 import { unlock } from './unlock'
@@ -28,6 +29,13 @@ async function main() {
             ).catch(console.error)
         case 'send-bzz':
             return sendBzz(
+                Arrays.requireStringArgument(process.argv, 'wallet'),
+                Arrays.requireStringArgument(process.argv, 'to'),
+                Arrays.requireNumberArgument(process.argv, 'amount').toFixed(0),
+                Arrays.requireStringArgument(process.argv, 'rpc')
+            ).catch(console.error)
+        case 'send-dai':
+            return sendDai(
                 Arrays.requireStringArgument(process.argv, 'wallet'),
                 Arrays.requireStringArgument(process.argv, 'to'),
                 Arrays.requireNumberArgument(process.argv, 'amount').toFixed(0),
